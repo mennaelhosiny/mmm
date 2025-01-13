@@ -1,0 +1,158 @@
+.about-us-container {
+  height: 100vh;
+  position: relative;
+  display: flex; 
+  flex-direction: column; 
+}
+
+.about-head {
+  background-color: #007bff;
+  padding: 50px 20px;
+}
+
+.text-aboutus {
+  color: white;
+  margin: auto;
+  text-align: center;
+}
+
+.form-and-image {
+  flex: 1; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+}
+
+.icon-section img {
+  width: 100%;
+}
+
+.contact-form {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #fff;
+  box-shadow: 0 3px 2px 0 #97979766;
+  padding: 24px;
+  border-radius: 20px;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 10px;
+  padding-left: 40px; 
+  border: 1px solid #F4F4F4;
+  border-radius: 5px;
+  font-size: 16px;
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  position: relative;
+}
+
+.form-input::before,
+.form-textarea::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.form-textarea::before {
+  top: 10px; 
+  width: 16px;
+  height: 16px;
+}
+
+.form-button {
+  background-color: #0000ff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.form-button:hover {
+  background-color: #0056b3;
+}
+
+.contact-info {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap:20px
+}
+
+.info-item {
+  text-align: center;
+}
+
+.info-item i {
+  font-size: 20px;
+  color: #007bff;
+  margin-bottom: 10px;
+  position: absolute; 
+}
+
+.info-item p {
+  margin: 0;
+  color: #555;
+}
+
+.form-input,
+.form-textarea {
+  padding-right: 30px; 
+}
+
+.icon-input{
+  position: absolute;
+  right: 10px; 
+  top: 70%;
+  transform: translateY(-50%); 
+  color: #888; 
+}
+.form-textarea{
+  background-color: #f4f4f4;
+
+}
+.contact-info .info-item{
+  border: #f4f4f4 1px solid;
+  padding: 20px 60px;
+  margin-bottom: 40px;
+  border-radius: 10px;
+  width: 300px;
+
+}
+.contact-info .icon{
+  font-size: 30px;
+  color: #0000ff;
+}
+@media screen and (max-width: 768px) {
+  .form-and-image {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .icon-section img {
+    display: none;
+  }
+    .contact-info{
+      display: block;
+      padding: 15px;
+    }
+    .contact-info .info-item{
+      width: auto;
+    }
+}

@@ -1,0 +1,264 @@
+
+:root {
+  --primary-color: #0000ff;
+  --input-bg: #f4f4f4;
+  --border-color: #ccc;
+  --icon-color: #A6A6A6
+}
+
+  
+  .Register-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .left-section,
+  .right-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .left-section {
+    background-color: #ffff;
+  }
+  
+  .illustration {
+    max-width: 90%;
+  }
+  
+  .form-container {
+    max-width: 620px;
+    width: 100%;
+    text-align: center;
+    background: #fff;
+    padding: 30px;
+   
+  }
+  
+  .logo {
+    width: 80px;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    text-align: right;
+  }
+  
+
+ 
+  
+  .register-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    text-align: right;
+  }
+  
+  
+  
+  .input-container {
+    display: flex;
+    align-items: center;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .input-container input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.9rem;
+  }
+  
+  .icon {
+    margin-left: 10px;
+    color: var(--icon-color);
+  }
+  
+  .toggle-password {
+    cursor: pointer;
+  }
+  
+  input[type="file"] {
+    width: 100%;
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-btn:hover {
+    background-color: darkblue;
+  }
+  
+  .form-footer {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.85rem;
+  }
+  .file-input-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .file-input-container input[type="file"] {
+    display: none; 
+  }
+  
+  .file-input-container label {
+    display: inline-block;
+    width: 100%;
+    padding: 7px;
+    font-size: 0.9rem;
+    color: #ccc;
+    background-color: #fff; 
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    text-align: right;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-input-container label:hover {
+    background-color: #ccc; 
+  }
+  
+  .file-input-container label:active {
+    background-color: #003f7f; 
+  }
+  
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.phone-input-container {
+  display: flex;
+  align-items: center;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px 10px;
+  gap: 8px;
+  width: 100%;
+}
+
+.flag-code-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.flag-icon {
+  width: 24px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.country-code {
+  font-size: 0.95rem;
+  color: #aaa;
+}
+
+.phone-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #333;
+}
+
+.phone-input::placeholder {
+  color: #aaa;
+}
+
+.phone-icon {
+  font-size: 1.2rem;
+  color: #999;
+}
+  .form-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  
+  
+  p {
+    font-size: 0.9rem;
+    margin-top: 20px;
+  }
+  
+  p a {
+    color: var(--blue);
+    text-decoration: none;
+  }
+  
+
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .login-container {
+      flex-direction: column;
+    }
+  
+    .left-section {
+      order: 2;
+    }
+  
+    .right-section {
+      order: 1;
+    }
+  }
+  
+  .error-msg {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+ 

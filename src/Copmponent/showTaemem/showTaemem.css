@@ -1,0 +1,166 @@
+
+
+
+.main-card {
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  color: #0000ff;
+  font-weight: 600;
+  margin-bottom: 20px;
+  background-color: #E3EAFF;
+  padding: 15px;
+  border-radius: 15px !important;
+  
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+h5{
+  font-size: 17px !important;
+}
+
+.col-left {
+  flex: 1;
+  max-width: 25%;
+  padding: 0 !important;
+
+}
+.card-header-2 .icon{
+  color: #0000ff !important;
+  background-color: #E6E6FC;
+  padding: 5px;
+  border-radius: 7px;
+}
+.col-right {
+  flex: 1;
+  max-width: 75%;
+  border: 2px solid #f2f2f2;
+  border-radius: 15px !important;
+
+}
+
+.list-group {
+  list-style-type: none;
+  color: #00004D;
+
+}
+.list-group li .locate{
+  color: #111111;
+}
+
+.list-group h5 {
+  padding: 10px;
+}
+
+.list-group li strong {
+  font-weight: bold;
+}
+
+.image-taemem img {
+  border-radius: 8px;
+  width: 350px;
+  height: 350px;
+}
+
+.map-container {
+  margin-top: 20px;
+}
+
+.map{
+  border-radius: 15px !important;
+}
+.location-info-card {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.location-info-card h6 {
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.publisher-card {
+  background-color: #F8F8F8;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.publisher-card h5,  .location-info-card h6{
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #00004D;
+}
+
+.publisher-card .list-group li,.location-info-card li {
+  padding: 10px;
+  border-bottom: 1px solid #f2f2f2;
+  background-color: #fff;
+
+}
+
+.publisher-card .list-group li strong {
+  font-weight: bold;
+}
+
+.publisher-card img {
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 50%;
+  margin-top: 10px;
+}
+
+/*  */
+
+.card-2 {
+  background-color: #F8F8F8;
+  border-radius: 15px;
+  flex: 1;
+  max-width: 330px;
+  padding: 10px;
+  color: #00004D;
+}
+
+.section-card {
+  flex-basis: calc(25% - 15px);
+}
+
+.card-header-2 {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+
+
+.card-char{
+  height: 330px;
+}
+.list-group {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-group li {
+  margin-bottom: 8px;
+}

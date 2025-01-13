@@ -1,0 +1,161 @@
+.taemem-list {
+    margin: 25px;
+    padding: 10px;
+  }
+  
+  .taemem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+  }
+  
+  .taemem-card {
+    width: 100%; 
+    height: 240px;
+    /* background: #fcfcfd; */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: right;
+    display: flex;
+  }
+  
+ 
+ 
+  .image{
+    width: 165px;
+    height: 165px;
+    
+  }
+  .taemem-card-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #CCCCD5;
+    
+  }
+  
+  .taemem-card-details {
+    padding: 15px;
+  }
+  
+  
+  .taemem-location,
+  .taemem-date,
+  .taemem-type,
+  .taemem-status {
+    font-size: 0.9rem;
+  }
+  
+  .taemem-status {
+    font-weight: bold;
+  }
+
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .pagination-container button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .pagination-container button.active {
+    background-color: blue;
+    color: white;
+  }
+  
+  .pagination-container button[disabled] {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  @media (max-width: 1024px) {
+    .taemem-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .taemem-list {
+    margin:0 ;
+  }
+  
+ 
+@media (max-width: 768px) {
+  .taemem-grid {
+    grid-template-columns: repeat(2, 1fr); 
+  }
+
+}
+
+@media (max-width: 390px) {
+  .taemem-grid {
+    grid-template-columns:repeat(2, 1fr); 
+  }
+
+  .taemem-card {
+    height: auto;
+    display: block;
+  }
+
+  .taemem-card .image{
+    margin-top: 20px;
+    width: 145px; 
+    height: 145px;
+    margin: auto;
+    margin-top: 15px;
+
+  }
+  .taemem-card-details{
+    margin-top: 25px !important;
+  }
+  .taemem-card-details h3{
+     font-size: 15px !important;
+  }
+}
+@media (max-width: 370px) {
+  .taemem-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .taemem-card {
+    height: auto;
+  }
+  .taemem-card {
+    display: block;
+    flex-direction: column; 
+    align-items: center;
+    text-align: center; 
+  }
+
+  .taemem-card .image {
+    margin-bottom: 10px; 
+    width: 145px; 
+    height: 145px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .taemem-card .image img {
+    max-width: 150px;
+    width: 100%;
+    height: auto; 
+  }
+
+  .taemem-card-details {
+    width: 100%;
+    padding: 10px; 
+  }
+
+  .taemem-card-details p,
+  .taemem-card-details h3 {
+    margin: 5px 0; 
+  }
+}
+
+
