@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { GoogleMap, Marker, InfoWindow, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL, googleMapsApiKey } from '../../config';
 
 const CreateLocation = () => {
     const navigate = useNavigate();
-    const { id } = useParams(); // Extract the taemem ID from the URL
-    const [loading, setLoading] = useState(false); // No need for loading state
+    const { id } = useParams();
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [location, setLocation] = useState({
         latitude: null,
@@ -22,7 +22,6 @@ const CreateLocation = () => {
 
     console.log('Extracted ID:', id);
 
-    // Fetch regions
     useEffect(() => {
         const fetchRegions = async () => {
             try {
@@ -44,31 +43,7 @@ const CreateLocation = () => {
         fetchRegions();
     }, []);
 
-    // Fetch cities based on selected region
-    useEffect(() => {
-        const fetchCities = async () => {
-            if (!selectedRegion) return;
-
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get(`${API_BASE_URL}/api/v1/cities?region_id=${selectedRegion}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        password: '$2y$12$lKLPBP1GlcywPnqPZceE4OcTWQNMrTgoshgoz91DrvvuTFMGiUI32',
-                        Accept: 'application/json',
-                        lang: 'en',
-                    },
-                });
-                setCities(response.data.data || []);
-            } catch (error) {
-                console.error('Error fetching cities:', error);
-            }
-        };
-
-        fetchCities();
-    }, [selectedRegion]);
-
-    // Formik configuration
+   
     const formik = useFormik({
         initialValues: {
             title: '',
@@ -83,15 +58,20 @@ const CreateLocation = () => {
             const errors = {};
             if (!values.title) errors.title = 'العنوان مطلوب';
             if (!values.date) errors.date = 'التاريخ مطلوب';
-            if (!values.region) errors.region = 'المنطقة مطلوبة';
-            if (!values.city) errors.city = 'المدينة مطلوبة';
             if (!values.description) errors.description = 'تفاصيل الموقع مطلوبة';
             if (!values.latitude || !values.longitude) errors.location = 'يرجى تحديد الموقع على الخريطة';
+
+            console.log('Validation Errors:', errors); // Debugging
             return errors;
         },
         onSubmit: async (values) => {
+            setLoading(true); // Start loading
             try {
                 const token = localStorage.getItem('token');
+
+                // Log form values and token
+                console.log('Form Values:', values);
+                console.log('Token:', token);
 
                 const formData = new FormData();
                 formData.append('date', values.date);
@@ -102,6 +82,9 @@ const CreateLocation = () => {
                 formData.append('lat', Number(values.latitude));
                 formData.append('lng', Number(values.longitude));
                 formData.append('taemem_id', id);
+
+                // Log FormData
+                console.log('FormData:', Object.fromEntries(formData.entries()));
 
                 const response = await axios.post(
                     `${API_BASE_URL}/api/v1/taemems/create-location`,
@@ -116,7 +99,8 @@ const CreateLocation = () => {
                     }
                 );
 
-                console.log('Create Location Response:', response.data);
+                // Log API response
+                console.log('API Response:', response.data);
 
                 if (response.data && response.data.is_success) {
                     alert('تم إنشاء الموقع بنجاح');
@@ -136,12 +120,14 @@ const CreateLocation = () => {
                 } else {
                     alert('حدث خطأ أثناء محاولة إنشاء الموقع');
                 }
+            } finally {
+                setLoading(false); // Stop loading
             }
         },
     });
 
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: "AIzaSyDh8mOJqZ7p9OJ8b9etkInisK75jtLtPKM",
+        googleMapsApiKey: googleMapsApiKey,
     });
 
     if (loadError) return <p>حدث خطأ أثناء تحميل الخريطة</p>;
@@ -221,11 +207,7 @@ const CreateLocation = () => {
                             {formik.values.latitude && formik.values.longitude && (
                                 <Marker
                                     position={{ lat: formik.values.latitude, lng: formik.values.longitude }}
-                                >
-                                    <InfoWindow>
-                                        <div>موقعك الحالي</div>
-                                    </InfoWindow>
-                                </Marker>
+                                />
                             )}
                         </GoogleMap>
                     </div>
@@ -251,8 +233,13 @@ const CreateLocation = () => {
                         <FontAwesomeIcon icon={faChevronRight} className="ms-2 mt-1" />
                         رجوع
                     </button>
-                    <button type="submit" className="btn text-white" style={{ background: '#0000ff' }}>
-                        إنشاء الموقع
+                    <button
+                        type="submit"
+                        className="btn text-white"
+                        style={{ background: '#0000ff' }}
+                        disabled={loading}
+                    >
+                        {loading ? 'جاري الإنشاء...' : 'إنشاء الموقع'}
                     </button>
                 </div>
             </form>

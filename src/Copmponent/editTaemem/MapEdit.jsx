@@ -1,23 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { API_BASE_URL } from '../../config';
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+import { API_BASE_URL, googleMapsApiKey } from '../../config';
 
 const MapEdit = () => {
   const navigate = useNavigate();
@@ -33,10 +21,15 @@ const MapEdit = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [selectedCity, setSelectedCity] = useState('');
   const [locationData, setLocationData] = useState(null);
+  const [showInfoWindow, setShowInfoWindow] = useState(false);
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
-  console.log('Extracted ID:', id);
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: googleMapsApiKey,
+  });
 
-  const fetchLocationData = async (mapId) => {
+  const fetchLocationData = useCallback(async (mapId) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(`${API_BASE_URL}/api/v1/taemems/location-data/${mapId}`, {
@@ -66,7 +59,7 @@ const MapEdit = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const fetchRegions = async () => {
@@ -118,7 +111,7 @@ const MapEdit = () => {
       return;
     }
     fetchLocationData(id);
-  }, [id]);
+  }, [id, fetchLocationData]);
 
   const formik = useFormik({
     initialValues: {
@@ -195,18 +188,14 @@ const MapEdit = () => {
     },
   });
 
-  const LocationMarker = ({ setLocation }) => {
-    useMapEvents({
-      click(e) {
-        const { lat, lng } = e.latlng;
-        setLocation({ latitude: lat, longitude: lng });
-        formik.setFieldValue('latitude', lat);
-        formik.setFieldValue('longitude', lng);
-      },
-    });
-
-    return null;
-  };
+  const handleMapClick = useCallback((e) => {
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+    setLocation({ latitude: lat, longitude: lng });
+    formik.setFieldValue('latitude', lat);
+    formik.setFieldValue('longitude', lng);
+    setShowInfoWindow(true); // Show InfoWindow when the map is clicked
+  }, [formik]);
 
   if (loading) {
     return <div>جاري التحميل...</div>;
@@ -214,6 +203,10 @@ const MapEdit = () => {
 
   if (error) {
     return <div className="alert alert-danger">{error}</div>;
+  }
+
+  if (!isLoaded) {
+    return <div>جاري تحميل الخريطة...</div>;
   }
 
   return (
@@ -323,23 +316,63 @@ const MapEdit = () => {
         <div className="mb-3">
           <label className="form-label">حدد الموقع على الخريطة</label>
           <div className="border rounded" style={{ height: '300px' }}>
-            <MapContainer
-              center={[formik.values.latitude || 24.7136, formik.values.longitude || 46.6753]}
+            <GoogleMap
+              mapContainerStyle={{ height: '100%', width: '100%' }}
+              center={{ lat: formik.values.latitude || 24.7136, lng: formik.values.longitude || 46.6753 }}
               zoom={13}
-              scrollWheelZoom={false}
-              style={{ height: '100%', width: '100%' }}
+              onClick={handleMapClick}
             >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              />
-              <LocationMarker setLocation={setLocation} />
+              {/* Marker for the selected location */}
               {formik.values.latitude && formik.values.longitude && (
-                <Marker position={[formik.values.latitude, formik.values.longitude]}>
-                  <Popup>موقعك الحالي</Popup>
-                </Marker>
+                <Marker
+                  position={{ lat: formik.values.latitude, lng: formik.values.longitude }}
+                  onClick={() => setShowInfoWindow(true)}
+                  icon={{
+                    url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // Red marker icon
+                  }}
+                />
               )}
-            </MapContainer>
+
+              {/* InfoWindow for the selected location */}
+              {showInfoWindow && formik.values.latitude && formik.values.longitude && (
+                <InfoWindow
+                  position={{ lat: formik.values.latitude, lng: formik.values.longitude }}
+                  onCloseClick={() => setShowInfoWindow(false)}
+                >
+                  <div>
+                    <h6>موقعك الحالي</h6>
+                    <p>Lat: {formik.values.latitude.toFixed(6)}</p>
+                    <p>Lng: {formik.values.longitude.toFixed(6)}</p>
+                  </div>
+                </InfoWindow>
+              )}
+
+              {/* Markers for other locations */}
+              {locationData?.locations?.map((location) => (
+                <Marker
+                  key={location.id}
+                  position={{ lat: parseFloat(location.lat), lng: parseFloat(location.lng) }}
+                  onClick={() => {
+                    setSelectedMarker(location);
+                    setShowInfoWindow(true);
+                  }}
+                />
+              ))}
+
+              {/* InfoWindow for other locations */}
+              {selectedMarker && (
+                <InfoWindow
+                  position={{ lat: parseFloat(selectedMarker.lat), lng: parseFloat(selectedMarker.lng) }}
+                  onCloseClick={() => setSelectedMarker(null)}
+                >
+                  <div>
+                    <h6>{selectedMarker.title}</h6>
+                    <p>{selectedMarker.address}</p>
+                    <p>التاريخ: {selectedMarker.date}</p>
+                  </div>
+                </InfoWindow>
+              )}
+            </GoogleMap>
           </div>
           {formik.errors.location && <div className="text-danger">{formik.errors.location}</div>}
         </div>
