@@ -164,3 +164,22 @@ h5{
 .list-group li {
   margin-bottom: 8px;
 }
+
+
+
+@media (max-width: 768px) {
+  .custom-form {
+    background-color: transparent !important; 
+    padding: 0 !important;
+    border-radius: 0 !important; 
+
+  }
+  .form-btn{
+    margin-bottom: 20px;
+  }
+}
+
+
+.gm-style-iw .gm-style-iw-c{
+  display: none !important;
+}

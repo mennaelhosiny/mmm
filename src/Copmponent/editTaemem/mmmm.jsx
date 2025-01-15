@@ -43,20 +43,21 @@ const MapEdit = () => {
       console.log('Location Data:', response.data);
 
       if (response.data && response.data.data) {
-        const data = response.data.data;
-        setLocationData(data);
+        setLocationData(response.data.data);
 
-        formik.setValues({
-          title: data.title || '',
-          date: data.date || '',
-          region: data.region?.id || '',
-          city: data.city?.id || '',
-          description: data.address || '',
-          latitude: parseFloat(data.main_location?.lat) || null,
-          longitude: parseFloat(data.main_location?.lng) || null,
-        });
-
-        setSelectedRegion(data.region?.id || null);  
+        if (response.data.data.main_location) {
+          formik.setValues({
+            ...formik.values,
+            title: response.data.data.title || '',
+            date: response.data.data.date || '',
+            region: response.data.data.region?.id || '',
+            city: response.data.data.city?.id || '',
+            description: response.data.data.address || '',
+            latitude: parseFloat(response.data.data.main_location.lat) || null,
+            longitude: parseFloat(response.data.data.main_location.lng) || null,
+          });
+        }
+        setSelectedRegion(response.data.data.region?.id || null);
       }
     } catch (error) {
       console.error('Error fetching location data:', error);
@@ -253,7 +254,7 @@ const MapEdit = () => {
         <div className="row mb-3">
           <div className="col-md-6">
             <label htmlFor="title" className="form-label">
-              العنوان
+              أضف عنوان الموقع
             </label>
             <input
               type="text"
@@ -267,7 +268,7 @@ const MapEdit = () => {
           </div>
           <div className="col-md-6">
             <label htmlFor="date" className="form-label">
-              التاريخ
+              أضف تاريخ
             </label>
             <input
               type="date"
@@ -335,7 +336,7 @@ const MapEdit = () => {
         {/* Description and Map */}
         <div className="mb-3">
           <label htmlFor="description" className="form-label">
-            الوصف
+            أضف تفاصيل الموقع
           </label>
           <textarea
             className="form-control"
@@ -349,7 +350,7 @@ const MapEdit = () => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">الإحداثيات</label>
+          <label className="form-label">حدد الموقع على الخريطة</label>
           <div className="border rounded" style={{ height: '300px' }}>
             <GoogleMap
               mapContainerStyle={{ height: '100%', width: '100%' }}
@@ -371,7 +372,22 @@ const MapEdit = () => {
                   draggable={false}
                 />
               )}
-           
+
+              {showInfoWindow && formik.values.latitude && formik.values.longitude && (
+                <InfoWindow
+                  position={{
+                    lat: formik.values.latitude,
+                    lng: formik.values.longitude,
+                  }}
+                  onCloseClick={() => setShowInfoWindow(false)}
+                >
+                  <div>
+                    <h6>موقعك الحالي</h6>
+                    <p>Lat: {formik.values.latitude.toFixed(6)}</p>
+                    <p>Lng: {formik.values.longitude.toFixed(6)}</p>
+                  </div>
+                </InfoWindow>
+              )}
             </GoogleMap>
           </div>
           {formik.errors.location && (

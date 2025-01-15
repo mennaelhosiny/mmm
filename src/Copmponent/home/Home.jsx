@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faChevronDown, faFilter, faBars } from "@fortawesome/free-solid-svg-icons";
-import { GoogleMap, Marker, InfoWindow, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../config";
 
 import "./home.css";
@@ -42,12 +42,12 @@ const Home = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       const img = new Image();
-  
+
       img.src = imageUrl;
       img.onload = () => {
         canvas.width = size;
         canvas.height = size;
-  
+
         // Draw the image with a border radius
         ctx.beginPath();
         ctx.moveTo(borderRadius, 0);
@@ -61,14 +61,14 @@ const Home = () => {
         ctx.quadraticCurveTo(0, 0, borderRadius, 0);
         ctx.closePath();
         ctx.clip();
-  
+
         ctx.drawImage(img, 0, 0, size, size);
-  
+
         resolve(canvas.toDataURL());
       };
     });
   };
-  
+
   const mapContainerStyle = {
     width: '100%',
     height: '100%',
@@ -113,7 +113,7 @@ const Home = () => {
     password: "$2y$12$lKLPBP1GlcywPnqPZceE4OcTWQNMrTgoshgoz91DrvvuTFMGiUI32",
     lang: "en"
   };
-  
+
   const fetchDropdownData = useCallback(async () => {
     try {
       const params = {
@@ -315,6 +315,68 @@ const Home = () => {
     }));
   };
 
+  const CustomPopup = ({ marker, onClose }) => {
+    if (!marker) return null;
+
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -100%)',
+          maxWidth: '250px',
+          borderRadius: '10px',
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+          overflow: 'hidden',
+          backgroundColor: '#fff',
+          fontFamily: 'Arial, sans-serif',
+          zIndex: 1000,
+        }}
+      >
+        <div style={{ position: 'relative' }}>
+          <img
+            src={marker.images[0]}
+            alt={marker.text}
+            style={{ width: '250px', height: '200px', objectFit: 'cover' }}
+          />
+        </div>
+        <div style={{ padding: '10px' }}>
+          <h4
+            style={{
+              margin: '0 0 10px 0',
+              fontSize: '16px',
+              color: '#333',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+            }}
+          >
+            {marker.text}
+          </h4>
+          <p style={{ margin: '0 0 5px 0', fontSize: '14px', color: '#777' }}>{marker.address}</p>
+        </div>
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '2px',
+            right: '2px',
+            background: '#fff',
+            border: 'none',
+            borderRadius: '10%',
+            width: '35px',
+            height: '35px',
+            cursor: 'pointer',
+            boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.2)',
+          }}
+        >
+          ×
+        </button>
+      </div>
+    );
+  };
+
   if (loadError) return <p>حدث خطأ أثناء تحميل الخريطة</p>;
   if (!isLoaded) return <p>جاري تحميل الخريطة...</p>;
 
@@ -449,86 +511,34 @@ const Home = () => {
       </div>
 
       <div style={{ position: "relative", height: "100vh" }}>
-
-
-<GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
-  {markers.map((marker) => (
+        <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
+        {markers.map((marker) => (
     <Marker
       key={marker.key}
       position={{ lat: marker.position[0], lng: marker.position[1] }}
       icon={{
         url: roundedImages[marker.key] || marker.images[0],
-        scaledSize: new window.google.maps.Size(50, 50),
+        scaledSize: new window.google.maps.Size(50, 50), 
+        
       }}
       onClick={() => setSelectedMarker(marker)}
     />
   ))}
+        </GoogleMap>
 
-  {selectedMarker && (
-    <InfoWindow
-      position={{
-        lat: selectedMarker.position[0],
-        lng: selectedMarker.position[1],
-      }}
-      onCloseClick={() => setSelectedMarker(null)}
-    >
-      <div
-        style={{
-          maxWidth: "250px",
-          borderRadius: "10px",
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-          overflow: "hidden",
-          backgroundColor: "#fff",
-          fontFamily: "Arial, sans-serif",
-        }}
-      >
-        {/* Image */}
-        <div style={{ position: "relative" }}>
-          <img
-            src={selectedMarker.images[0]}
-            alt={selectedMarker.text}
-            style={{
-              width: "250px",
-              height: "200px",
-              objectFit: "cover",
-            }}
+        {selectedMarker && (
+          <CustomPopup
+            marker={selectedMarker}
+            onClose={() => setSelectedMarker(null)}
           />
-        </div>
+        )}
 
-        {/* Details */}
-        <div style={{ padding: "10px" }}>
-          <h4
-            style={{
-              margin: "0 0 10px 0",
-              fontSize: "16px",
-              color: "#333",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-            }}
-          >
-            {selectedMarker.text}
-          </h4>
-          <p
-            style={{
-              margin: "0 0 5px 0",
-              fontSize: "14px",
-              color: "#777",
-            }}
-          >
-            {selectedMarker.address}
-          </p>
-        </div>
-      </div>
-    </InfoWindow>
-  )}
-</GoogleMap>
         <div
           style={{
             position: "absolute",
             top: "6%",
             width: "50px",
-            left: showFullList ? "35px" : "",
+            left: showFullList ? "12%" : "",
             display: isMobile ? "flex" : "none",
             alignItems: "center",
             justifyContent: "center",
