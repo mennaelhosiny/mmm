@@ -1,5 +1,5 @@
 :root {
-  --blue: #0000ff;
+  --blue: #004efe;
 }
 
 .ForgetPass-container {
@@ -85,7 +85,7 @@ p {
 }
 
 .submit-btn:hover {
-  background-color: #0000ff;
+  background-color: #004efe;
 }
 
 /* Responsive Design */

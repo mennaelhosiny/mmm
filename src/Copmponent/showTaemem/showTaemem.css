@@ -12,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: 18px;
-  color: #0000ff;
+  color: #004efe;
   font-weight: 600;
   margin-bottom: 20px;
   background-color: #E3EAFF;
@@ -42,7 +42,7 @@ h5{
 
 }
 .card-header-2 .icon{
-  color: #0000ff !important;
+  color: #004efe !important;
   background-color: #E6E6FC;
   padding: 5px;
   border-radius: 7px;
@@ -176,6 +176,44 @@ h5{
   }
   .form-btn{
     margin-bottom: 20px;
+  }
+  .image-taemem-mobile {
+    display: block !important;
+  }
+  .image-taemem{
+    display: none;
+  }
+  .col-left{
+    display: none;
+  }
+  .col-right{
+    max-width: 100%;
+  }
+  .list-group h5 ,.card-header h5 ,.card-header span{
+    font-size: 12px !important;
+  }
+  .list-group h5 {
+    padding: 0px;
+  }
+  .card-char{
+    height: auto;
+  }
+  .map-contain{
+    display: block !important;
+  }
+  .location-info-card{
+    width: 100% !important;
+    margin-bottom: 10px !important;
+  }
+  .map{
+    width: 100% !important;
+    margin-right: 0 ;
+  }
+  .publisher-card {
+    width: 100% !important;
+  }
+  .card-2 {
+    max-width: 100%;
   }
 }
 

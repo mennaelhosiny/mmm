@@ -242,7 +242,7 @@ const ShowTaemem = () => {
                     <div className="icons d-flex mb-2 mt-5">
                         <FontAwesomeIcon
                             icon={faPenToSquare}
-                            style={{ background: "#0000ff", color: "#fff", padding: "10px", borderRadius: "7px", cursor: "pointer" }}
+                            style={{ background: "#004efe", color: "#fff", padding: "10px", borderRadius: "7px", cursor: "pointer" }}
                             onClick={handleEditClick}
 
                         />
@@ -262,9 +262,14 @@ const ShowTaemem = () => {
                         <div className="col-right">
                             <div className="card-header">
                                 <h5>{taememData.taemem_type.name}</h5>
-                                <span className='text-secondary'>رقم التعميم: {taememData?.id}</span>
+                                <span className='text-secondary'>رقم التعميم: {taememData?.id}</span>                               
+                            </div>
+                            <div className="d-flex">
+                            <div className="image-taemem-mobile" style={{float: 'left',display:"none",maxWidth:"35%"}}>
+                                <img src={taememData.image} alt="taemem" width="100%" />
                             </div>
                             <div className="list-group mx-2">
+                                
                                 <h5><strong>عنوان التعميم:</strong><span className='text-secondary mx-2'>{taememData?.title || 'تفاصيل التعميم'}</span></h5>
                                 <h5> <strong>مفقود منذ:</strong><span className='text-secondary mx-2 '>{taememData?.lost_date || 'غير متوفر'}</span> </h5>
                                 <h5><strong>آخر مرة شوهد فيها:</strong> <span className='text-secondary mx-2'>{taememData?.locations[0]?.date || 'غير متوفر'}</span></h5>
@@ -286,6 +291,7 @@ const ShowTaemem = () => {
                                     </>
                                 ) : null}
 
+                            </div>
                             </div>
                         </div>
 
@@ -512,7 +518,7 @@ const ShowTaemem = () => {
                                 <FontAwesomeIcon
                                     icon={faPenToSquare}
                                     className="mx-3"
-                                    style={{ color: "#0000ff", cursor: "pointer", float: "left" }}
+                                    style={{ color: "#004efe", cursor: "pointer", float: "left" }}
                                     onClick={handleEditMapClick}
 
                                 />
@@ -539,7 +545,7 @@ const ShowTaemem = () => {
                                     {loggedInUserId === taememData?.user?.id && (
                                         <FontAwesomeIcon
                                             icon={faPenToSquare}
-                                            style={{ color: "#0000ff", cursor: "pointer", display: "block", marginBottom: "10px" }}
+                                            style={{ color: "#004efe", cursor: "pointer", display: "block", marginBottom: "10px" }}
                                             onClick={handleEditLocationClick}
                                             disabled={!taememData || !taememData.location}
                                         />

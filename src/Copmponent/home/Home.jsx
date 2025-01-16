@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarAlt, faChevronDown, faFilter, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarAlt, faChevronDown, faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { googleMapsApiKey } from "../../config";
 
@@ -35,6 +35,8 @@ const Home = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [roundedImages, setRoundedImages] = useState({});
+  const [isExpanded, setIsExpanded] = useState(false);
+
 
   const markerRefs = useRef([]);
   const createRoundedImage = (imageUrl, size, borderRadius) => {
@@ -203,6 +205,7 @@ const Home = () => {
     setItems([]);
     setHasMore(true);
     fetchData();
+    toggleFilterGroup();
   };
 
   const toggleFilterGroup = () => {
@@ -454,9 +457,13 @@ const Home = () => {
         <h4 className="text-center">استكشف التعميمات</h4>
         <p className="text-center text-secondary">استعرض المفقودات و المعثورات على الخريطة</p>
 
-        <img src={mapFilter} alt="map" srcSet="" onClick={toggleFilterGroup} />
+        <img src={mapFilter} alt="map" onClick={toggleFilterGroup} style={{ cursor: "pointer" }} />
+
         <div className={`filter-group ${isFilterGroupVisible ? "visible" : ""}`}>
-          <select name="category" value={filters.category} className="filter-select" onChange={handleFilterChange}>
+         
+          <FontAwesomeIcon icon={faChevronRight} className="filters-mobile" onClick={toggleFilterGroup} style={{marginLeft:"95%"}}/>
+
+          <select name="category" value={filters.category} className="filter-select filter-desc" onChange={handleFilterChange}>
             <option value="">اختر الفئة</option>
             {categories.map((type) => (
               <option key={type.id} value={type.id}>
@@ -465,7 +472,7 @@ const Home = () => {
             ))}
           </select>
 
-          <select name="status" value={filters.status} className="filter-select" onChange={handleFilterChange}>
+          <select name="status" value={filters.status} className="filter-select filter-desc" onChange={handleFilterChange}>
             <option value="">اختر الحالة</option>
             {statuses.map((status) => (
               <option key={status.id} value={status.id}>
@@ -473,6 +480,35 @@ const Home = () => {
               </option>
             ))}
           </select>
+          <div className="filters-mobile">
+            <h4 >الفئة</h4>
+            <div className="filter-category">
+              {categories.map((type) => (
+                <button
+                  key={type.id}
+                  className={`filters-button ${filters.category === type.id ? "active" : ""}`}
+                  onClick={() => handleFilterChange({ target: { name: "category", value: type.id } })}
+                >
+                  {type.title}
+                </button>
+              ))}
+            </div>
+
+            <h4 >حالة التعميم</h4>
+            <div className="filter-status ">
+              {statuses.map((status) => (
+                <button
+                  key={status.id}
+                  className={`filters-button ${filters.status === status.id ? "active" : ""}`}
+                  onClick={() => handleFilterChange({ target: { name: "status", value: status.id } })}
+                  
+                >
+                  {status.title}
+                </button>
+              ))}
+            </div>
+          </div>
+
 
           <select name="region" value={filters.region} className="filter-select" onChange={handleFilterChange}>
             <option value="">المنطقة</option>
@@ -512,18 +548,18 @@ const Home = () => {
 
       <div style={{ position: "relative", height: "100vh" }}>
         <GoogleMap mapContainerStyle={mapContainerStyle} zoom={12} center={center}>
-        {markers.map((marker) => (
-    <Marker
-      key={marker.key}
-      position={{ lat: marker.position[0], lng: marker.position[1] }}
-      icon={{
-        url: roundedImages[marker.key] || marker.images[0],
-        scaledSize: new window.google.maps.Size(50, 50), 
-        
-      }}
-      onClick={() => setSelectedMarker(marker)}
-    />
-  ))}
+          {markers.map((marker) => (
+            <Marker
+              key={marker.key}
+              position={{ lat: marker.position[0], lng: marker.position[1] }}
+              icon={{
+                url: roundedImages[marker.key] || marker.images[0],
+                scaledSize: new window.google.maps.Size(50, 50),
+
+              }}
+              onClick={() => setSelectedMarker(marker)}
+            />
+          ))}
         </GoogleMap>
 
         {selectedMarker && (
@@ -608,7 +644,7 @@ const Home = () => {
                         : result.taemem_status?.name === "معثور"
                           ? "red"
                           : result.taemem_status?.name === "سَرِقة"
-                            ? "blue"
+                            ? "#004efe"
                             : "gray",
                   }}
                 >
